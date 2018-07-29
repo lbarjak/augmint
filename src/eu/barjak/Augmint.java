@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 public class Augmint {
 
-    static String match1 = "";
     static StringBuilder row = new StringBuilder();
     static ArrayList<String> rates = new ArrayList<>();
 
@@ -21,9 +20,9 @@ public class Augmint {
         BufferedReader in = new BufferedReader(new InputStreamReader(ethHistData.openStream()));
         String inputLine;
         int counter = 1087;
+        
         while ((inputLine = in.readLine()) != null) {
             Pattern pattern1 = Pattern.compile("td class=\"text-left");
-
             Matcher matcher1 = pattern1.matcher(inputLine);
             if (matcher1.find()) {
                 row.append("    {\n"
@@ -31,13 +30,14 @@ public class Augmint {
                         + "        \"date\": \"").append(inputLine.substring(26, 28)).append(" ").append(inputLine.substring(22, 25)).append(" ").append(inputLine.substring(32, 34)).append("\",\n"
                         + "        \"open\": ");
                 inputLine = in.readLine();
-                row.append(inputLine.substring(49, 55)).append(",\n        \"high\": ");
+                //System.out.println(inputLine.indexOf(">"));
+                row.append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).append(",\n        \"high\": ");
                 inputLine = in.readLine();
-                row.append(inputLine.substring(49, 55)).append(",\n        \"low\": ");
+                row.append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).append(",\n        \"low\": ");
                 inputLine = in.readLine();
-                row.append(inputLine.substring(49, 55)).append(",\n        \"close\": ");
+                row.append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).append(",\n        \"close\": ");
                 inputLine = in.readLine();
-                row.append(inputLine.substring(49, 55)).append("\n    },\n");
+                row.append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).append("\n    },\n");
                 rates.add(row.toString());
                 //System.out.print(row);
                 row.setLength(0);
