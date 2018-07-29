@@ -30,7 +30,6 @@ public class Augmint {
                         + "        \"date\": \"").append(inputLine.substring(26, 28)).append(" ").append(inputLine.substring(22, 25)).append(" ").append(inputLine.substring(32, 34)).append("\",\n"
                         + "        \"open\": ");
                 inputLine = in.readLine();
-                //System.out.println(inputLine.indexOf(">"));
                 row.append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).append(",\n        \"high\": ");
                 inputLine = in.readLine();
                 row.append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).append(",\n        \"low\": ");
@@ -43,8 +42,8 @@ public class Augmint {
                 row.setLength(0);
             }
         }
-        for (int i = rates.size() - 1; i > 0; i--) {
-            System.out.print(rates.get(i));
+        for (int i = 0; i < rates.size(); i++) {
+            System.out.print(rates.get(1087 - 938 - i));
         }
     }
 }
