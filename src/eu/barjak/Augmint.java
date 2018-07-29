@@ -51,6 +51,7 @@ public class Augmint {
                 row.setLength(0);
             }
         }
+        in.close();
         for (int i = rates.size() - 1; i >= 0; i--) {
             System.out.print(rates.get(i));
         }
