@@ -24,14 +24,23 @@ public class Augmint {
 
             Matcher matcher1 = pattern1.matcher(inputLine);
             if (matcher1.find()) {
-                row.append("    {\n        \"seq\":" + ++counter + ",\n"
+                row.append("    {\n        \"seq\": " + ++counter + ",\n"
                         + "        \"date\": \"" + inputLine.substring(26, 28) + " " + inputLine.substring(22, 25) + " " + inputLine.substring(32, 34) + "\",\n"
                         + "        \"open\": ");
-                //System.out.println(inputLine.substring(22));
-                System.err.println(row);
-
+                inputLine = in.readLine();
+                row.append(inputLine.substring(49,55) + ",\n"
+                        + "        \"high\": ");
+                inputLine = in.readLine();
+                row.append(inputLine.substring(49,55) + ",\n"
+                        + "        \"low\": ");
+                inputLine = in.readLine();
+                row.append(inputLine.substring(49,55) + ",\n"
+                        + "        \"close\": ");
+                inputLine = in.readLine();
+                row.append(inputLine.substring(49,55) + "\n    },\n");
+                System.out.print(row);
+                row.setLength(0);
             }
-            //System.out.println(inputLine);
         }
     }
 }
