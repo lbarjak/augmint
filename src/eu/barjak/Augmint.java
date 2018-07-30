@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,12 +17,21 @@ public class Augmint {
     static StringBuilder row = new StringBuilder();
     static ArrayList<String> rates = new ArrayList<>();
 
-    public static void main(String[] args) throws MalformedURLException, IOException {
+    public static void main(String[] args) throws MalformedURLException, IOException, ParseException {
 
         URL ethHistData = new URL("https://coinmarketcap.com/currencies/ethereum/historical-data/?start=20180301&end=20180729");
         BufferedReader in = new BufferedReader(new InputStreamReader(ethHistData.openStream()));
         String inputLine;
-        int counter = 1087;
+        int index = ethHistData.toString().indexOf("start=");
+        
+        String start = ethHistData.toString().substring(index + 6, index + 14);
+        String end = ethHistData.toString().substring(index + 6 + 13, index + 14 + 13);
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+        long diff = DATE_FORMAT.parse(end).getTime() - DATE_FORMAT.parse(start).getTime();
+        int days = (int) (diff / 1000 / 60 / 60 / 24);
+
+        int prev = 937;
+        int counter = prev + 1 + days;
 
         while ((inputLine = in.readLine()) != null) {
             Pattern pattern1 = Pattern.compile("td class=\"text-left");
