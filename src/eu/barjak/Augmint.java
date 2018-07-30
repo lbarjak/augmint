@@ -3,24 +3,33 @@ package eu.barjak;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Augmint {
 
-    static StringBuilder row = new StringBuilder();
-    static ArrayList<String> rates = new ArrayList<>();
-
-    public static void main(String[] args) throws MalformedURLException, IOException, ParseException {
-
+    public static void main(String[] args) {
+        try {
+            new Augmint().augmint();
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(Augmint.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void augmint() throws IOException, ParseException {
+        
+        StringBuilder row = new StringBuilder();
+        ArrayList<String> rates = new ArrayList<>();
+        
         URL ethHistData = new URL("https://coinmarketcap.com/currencies/ethereum/historical-data/?start=20180301&end=20180729");
-        BufferedReader in = new BufferedReader(new InputStreamReader(ethHistData.openStream()));
+        BufferedReader in;
+        in = new BufferedReader(new InputStreamReader(ethHistData.openStream()));
         String inputLine;
         int index = ethHistData.toString().indexOf("start=");
         
