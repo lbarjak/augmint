@@ -21,57 +21,56 @@ public class Augmint {
             Logger.getLogger(Augmint.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void augmint() throws IOException, ParseException {
-        
+
         StringBuilder row = new StringBuilder();
         ArrayList<String> rates = new ArrayList<>();
-        
-        URL ethHistData = new URL("https://coinmarketcap.com/currencies/ethereum/historical-data/?start=20180301&end=20180729");
+        String u = "https://coinmarketcap.com/currencies/ethereum/historical-data/?start=20180301&end=20180731";
+        URL url = new URL(u);
         BufferedReader in;
-        in = new BufferedReader(new InputStreamReader(ethHistData.openStream()));
-        String inputLine;
-        int index = ethHistData.toString().indexOf("start=");
+        in = new BufferedReader(new InputStreamReader(url.openStream()));
+        String iL;//inputLine
         
-        String start = ethHistData.toString().substring(index + 6, index + 14);
-        String end = ethHistData.toString().substring(index + 6 + 13, index + 14 + 13);
-        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-        long diff = DATE_FORMAT.parse(end).getTime() - DATE_FORMAT.parse(start).getTime();
+        int i1 = u.indexOf("start=") + 6;
+        int i2 = u.indexOf("end=") + 4;
+        String start = u.substring(i1, i1 + 8);
+        String end = u.substring(i2, i2 + 8);
+        SimpleDateFormat myDate = new SimpleDateFormat("yyyyMMdd");
+        long diff = myDate.parse(end).getTime() - myDate.parse(start).getTime();
         int days = (int) (diff / 1000 / 60 / 60 / 24);
 
         int prev = 937;
         int counter = prev + 1 + days;
 
-        while ((inputLine = in.readLine()) != null) {
+        while ((iL = in.readLine()) != null) {
             Pattern pattern1 = Pattern.compile("td class=\"text-left");
-            Matcher matcher1 = pattern1.matcher(inputLine);
+            Matcher matcher1 = pattern1.matcher(iL);
             if (matcher1.find()) {
                 row.
-                        append("    {\n        \"seq\": ").
-                        append(counter--).
-                        append(",\n        \"date\": \"").
-                        append(inputLine.substring(26, 28)).
-                        append(" ").
-                        append(inputLine.substring(22, 25)).
-                        append(" ").
-                        append(inputLine.substring(32, 34)).
-                        append("\",\n        \"open\": ");
-                inputLine = in.readLine();
+                        append("    {\n").
+                        append("        \"seq\": ").append(counter--).append(",\n").
+                        append("        \"date\": \"").
+                        append(iL.substring(26, 28)).append(" ").
+                        append(iL.substring(22, 25)).append(" ").
+                        append(iL.substring(32, 34)).append("\",\n");  
+                iL = in.readLine();
                 row.
-                        append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).
-                        append(",\n        \"high\": ");
-                inputLine = in.readLine();
+                        append("        \"open\": ").
+                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n");  
+                iL = in.readLine();
                 row.
-                        append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).
-                        append(",\n        \"low\": ");
-                inputLine = in.readLine();
+                        append("        \"high\": ").
+                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n");
+                iL = in.readLine();
                 row.
-                        append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).
-                        append(",\n        \"close\": ");
-                inputLine = in.readLine();
+                        append("        \"low\": ").
+                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n");
+                iL = in.readLine();
                 row.
-                        append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).
-                        append("\n    },\n");
+                        append("        \"close\": ").
+                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n").
+                        append("    },\n");
 
                 rates.add(row.toString());
                 row.setLength(0);
