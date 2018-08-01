@@ -17,13 +17,13 @@ public class Rates {
 
     public static void main(String[] args) {
         try {
-            new Rates().augmint();
+            new Rates().rates();
         } catch (IOException | ParseException ex) {
             Logger.getLogger(Rates.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void augmint() throws IOException, ParseException {
+    public void rates() throws IOException, ParseException {
 
         StringBuilder row = new StringBuilder();
         ArrayList<StringBuilder> rates = new ArrayList<>();
