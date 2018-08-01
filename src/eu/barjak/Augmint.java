@@ -7,6 +7,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -25,23 +26,23 @@ public class Augmint {
     public void augmint() throws IOException, ParseException {
 
         StringBuilder row = new StringBuilder();
-        ArrayList<String> rates = new ArrayList<>();
-        String u = "https://coinmarketcap.com/currencies/ethereum/historical-data/?start=20180301&end=20180731";
+        ArrayList<StringBuilder> rates = new ArrayList<>();
+        
+        SimpleDateFormat myDateFormat = new SimpleDateFormat("yyyyMMdd");
+        Calendar c = Calendar.getInstance();
+        final String oldDate = "20150809";
+        c.setTime(myDateFormat.parse(oldDate));
+        Integer prevSeq = 1087;
+        c.add(Calendar.DAY_OF_MONTH, prevSeq - 3 + 1);
+        String newDate = myDateFormat.format(c.getTime());
+        
+        String u = "https://coinmarketcap.com/currencies/ethereum/historical-data/?start="
+                + newDate
+                + "&end=20181231";
         URL url = new URL(u);
         BufferedReader in;
         in = new BufferedReader(new InputStreamReader(url.openStream()));
         String iL;//inputLine
-        
-        int i1 = u.indexOf("start=") + 6;
-        int i2 = u.indexOf("end=") + 4;
-        String start = u.substring(i1, i1 + 8);
-        String end = u.substring(i2, i2 + 8);
-        SimpleDateFormat myDate = new SimpleDateFormat("yyyyMMdd");
-        long diff = myDate.parse(end).getTime() - myDate.parse(start).getTime();
-        int days = (int) (diff / 1000 / 60 / 60 / 24);
-
-        int prev = 937;
-        int counter = prev + 1 + days;
 
         while ((iL = in.readLine()) != null) {
             Pattern pattern1 = Pattern.compile("td class=\"text-left");
@@ -49,15 +50,15 @@ public class Augmint {
             if (matcher1.find()) {
                 row.
                         append("    {\n").
-                        append("        \"seq\": ").append(counter--).append(",\n").
+                        append("        \"seq\":").append(",\n").
                         append("        \"date\": \"").
                         append(iL.substring(26, 28)).append(" ").
                         append(iL.substring(22, 25)).append(" ").
-                        append(iL.substring(32, 34)).append("\",\n");  
+                        append(iL.substring(32, 34)).append("\",\n");
                 iL = in.readLine();
                 row.
                         append("        \"open\": ").
-                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n");  
+                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n");
                 iL = in.readLine();
                 row.
                         append("        \"high\": ").
@@ -72,23 +73,34 @@ public class Augmint {
                         append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n").
                         append("    },\n");
 
-                rates.add(row.toString());
+                rates.add(new StringBuilder(row));
                 row.setLength(0);
             }
         }
         in.close();
         for (int i = rates.size() - 1; i >= 0; i--) {
-            System.out.print(rates.get(i));
+            System.out.print(rates.get(i).
+                    replace(rates.get(i).indexOf("seq") + 5,
+                            rates.get(i).indexOf("seq") + 5,
+                            " " + ++prevSeq));
         }
     }
 }
-/*
+/*  {
+        "seq": 3,
+        "date": "9 Aug 15",
+        "open": 0.706136,
+        "high": 0.87981,
+        "low": 0.629191,
+        "close": 0.701897
+    },
+    ....
     {
-        "seq": 937,
-        "date": "28 Feb 18",
-        "open": 877.93,
-        "high": 890.11,
-        "low": 855.12,
-        "close": 855.20
+        "seq": 1087,
+        "date": "28 Jul 18",
+        "open": 469.68,
+        "high": 471.59,
+        "low": 462.99,
+        "close": 466.90
     }
  */
