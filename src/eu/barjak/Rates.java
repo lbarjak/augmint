@@ -13,13 +13,13 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Augmint {
+public class Rates {
 
     public static void main(String[] args) {
         try {
-            new Augmint().augmint();
+            new Rates().augmint();
         } catch (IOException | ParseException ex) {
-            Logger.getLogger(Augmint.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Rates.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -28,20 +28,18 @@ public class Augmint {
         StringBuilder row = new StringBuilder();
         ArrayList<StringBuilder> rates = new ArrayList<>();
         
-        SimpleDateFormat myDateFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
         Calendar c = Calendar.getInstance();
-        final String oldDate = "20150809";
-        c.setTime(myDateFormat.parse(oldDate));
+        final String firstDate = "20150809";
+        c.setTime(yyyyMMdd.parse(firstDate));
         Integer prevSeq = 1087;
         c.add(Calendar.DAY_OF_MONTH, prevSeq - 3 + 1);
-        String newDate = myDateFormat.format(c.getTime());
+        String newDate = yyyyMMdd.format(c.getTime());
         
         String u = "https://coinmarketcap.com/currencies/ethereum/historical-data/?start="
                 + newDate
                 + "&end=20181231";
-        URL url = new URL(u);
-        BufferedReader in;
-        in = new BufferedReader(new InputStreamReader(url.openStream()));
+        BufferedReader in = new BufferedReader(new InputStreamReader(new URL(u).openStream()));
         String iL;//inputLine
 
         while ((iL = in.readLine()) != null) {
