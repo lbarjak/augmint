@@ -27,15 +27,16 @@ public class Rates {
 
         StringBuilder row = new StringBuilder();
         ArrayList<StringBuilder> rates = new ArrayList<>();
-        
+
         SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyyMMdd");
         Calendar c = Calendar.getInstance();
         final String firstDate = "20150809";
         c.setTime(yyyyMMdd.parse(firstDate));
         Integer prevSeq = 1087;
+        //Integer prevSeq = 1105;
         c.add(Calendar.DAY_OF_MONTH, prevSeq - 3 + 1);
         String newDate = yyyyMMdd.format(c.getTime());
-        
+
         String u = "https://coinmarketcap.com/currencies/ethereum/historical-data/?start="
                 + newDate
                 + "&end=20181231";
@@ -69,7 +70,7 @@ public class Rates {
                 row.
                         append("        \"close\": ").
                         append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append("\n").
-                        append("    },\n");
+                        append("    }");
 
                 rates.add(new StringBuilder(row));
                 row.setLength(0);
@@ -81,6 +82,11 @@ public class Rates {
                     replace(rates.get(i).indexOf("seq") + 5,
                             rates.get(i).indexOf("seq") + 5,
                             " " + ++prevSeq));
+            if (i > 0) {
+                System.out.print(",");
+            }
+            System.out.println();
+
         }
     }
 }
@@ -94,11 +100,11 @@ public class Rates {
     },
     ....
     {
-        "seq": 1087,
-        "date": "28 Jul 18",
-        "open": 469.68,
-        "high": 471.59,
-        "low": 462.99,
-        "close": 466.90
+        "seq": 1105,
+        "date": "15 Aug 18",
+        "open": 280.39,
+        "high": 303.59,
+        "low": 280.12,
+        "close": 282.36
     }
  */
