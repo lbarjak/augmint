@@ -68,7 +68,7 @@ public class Rates {
                 iL = in.readLine();
                 row.
                         append("        \"close\": ").
-                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n").
+                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append("\n").
                         append("    },\n");
 
                 rates.add(new StringBuilder(row));
