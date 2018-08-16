@@ -41,36 +41,26 @@ public class Rates {
                 + newDate
                 + "&end=20181231";
         BufferedReader in = new BufferedReader(new InputStreamReader(new URL(u).openStream()));
-        String iL;//inputLine
+        String inputLine;
 
-        while ((iL = in.readLine()) != null) {
+        while ((inputLine = in.readLine()) != null) {
             Pattern pattern1 = Pattern.compile("td class=\"text-left");
-            Matcher matcher1 = pattern1.matcher(iL);
+            Matcher matcher1 = pattern1.matcher(inputLine);
             if (matcher1.find()) {
-                row.
-                        append("    {\n").
-                        append("        \"seq\":").append(",\n").
-                        append("        \"date\": \"").
-                        append(iL.substring(26, 28)).append(" ").
-                        append(iL.substring(22, 25)).append(" ").
-                        append(iL.substring(32, 34)).append("\",\n");
-                iL = in.readLine();
-                row.
-                        append("        \"open\": ").
-                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n");
-                iL = in.readLine();
-                row.
-                        append("        \"high\": ").
-                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n");
-                iL = in.readLine();
-                row.
-                        append("        \"low\": ").
-                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append(",\n");
-                iL = in.readLine();
-                row.
-                        append("        \"close\": ").
-                        append(iL.substring(iL.indexOf(">") + 1, iL.indexOf(">") + 7)).append("\n").
-                        append("    }");
+                row.append("    {\n");
+                row.append("        \"seq\":,\n");
+                row.append("        \"date\": \"").
+                        append(inputLine.substring(26, 28)).append(" ").
+                        append(inputLine.substring(22, 25)).append(" ").
+                        append(inputLine.substring(32, 34)).append("\",\n");
+                String[] status = {"open", "high", "low", "close"};
+                for (String str : status) {
+                    inputLine = in.readLine();
+                    row.append("        \"").append(str).append("\": ").
+                            append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).
+                            append(",\n");
+                }
+                row.append("    }");
 
                 rates.add(new StringBuilder(row));
                 row.setLength(0);
@@ -79,14 +69,13 @@ public class Rates {
         in.close();
         for (int i = rates.size() - 1; i >= 0; i--) {
             System.out.print(rates.get(i).
-                    replace(rates.get(i).indexOf("seq") + 5,
-                            rates.get(i).indexOf("seq") + 5,
+                    replace(rates.get(i).indexOf(",\n"),
+                            rates.get(i).indexOf(",\n"),
                             " " + ++prevSeq));
             if (i > 0) {
                 System.out.print(",");
             }
             System.out.println();
-
         }
     }
 }
