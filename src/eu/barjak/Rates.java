@@ -42,6 +42,7 @@ public class Rates {
                 + "&end=20181231";
         BufferedReader in = new BufferedReader(new InputStreamReader(new URL(u).openStream()));
         String inputLine;
+        final String[] status = {"open", "high", "low", "close"};
 
         while ((inputLine = in.readLine()) != null) {
             Pattern pattern1 = Pattern.compile("td class=\"text-left");
@@ -53,7 +54,6 @@ public class Rates {
                         append(inputLine.substring(26, 28)).append(" ").
                         append(inputLine.substring(22, 25)).append(" ").
                         append(inputLine.substring(32, 34)).append("\",\n");
-                String[] status = {"open", "high", "low", "close"};
                 for (String str : status) {
                     inputLine = in.readLine();
                     row.append("        \"").append(str).append("\": ").
