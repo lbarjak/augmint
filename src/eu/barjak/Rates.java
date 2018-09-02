@@ -57,8 +57,11 @@ public class Rates {
                 for (String str : status) {
                     inputLine = in.readLine();
                     row.append("        \"").append(str).append("\": ").
-                            append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7)).
-                            append(",\n");
+                            append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7));
+                    if (!str.equals("close")) {
+                        row.append(",");
+                    }
+                    row.append("\n");
                 }
                 row.append("    }");
 
