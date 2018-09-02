@@ -32,8 +32,8 @@ public class Rates {
         Calendar c = Calendar.getInstance();
         final String firstDate = "20150809";
         c.setTime(yyyyMMdd.parse(firstDate));
-        Integer prevSeq = 1087;
-        //Integer prevSeq = 1105;
+        //Integer prevSeq = 1087;
+        Integer prevSeq = 1105;
         c.add(Calendar.DAY_OF_MONTH, prevSeq - 3 + 1);
         String newDate = yyyyMMdd.format(c.getTime());
 
