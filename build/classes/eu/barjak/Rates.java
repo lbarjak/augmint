@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Rates {
-    
+
     public static void main(String[] args) {
         try {
             new Rates().rates();
@@ -32,7 +32,7 @@ public class Rates {
         Calendar c = Calendar.getInstance();
         final String firstDate = "20150809";
         c.setTime(yyyyMMdd.parse(firstDate));
-        Integer prevSeq = 1190;
+        Integer prevSeq = 1153;
         c.add(Calendar.DAY_OF_MONTH, prevSeq - 3 + 1);
         String newDate = yyyyMMdd.format(c.getTime());
 
@@ -42,11 +42,9 @@ public class Rates {
         BufferedReader in = new BufferedReader(new InputStreamReader(new URL(u).openStream()));
         String inputLine;
         final String[] status = {"open", "high", "low", "close"};
-        Pattern pattern1 = Pattern.compile("td class=\"text-left");
-        Pattern pattern2 = Pattern.compile("(?<=>).+(?=<)");
-        String match2 = "";
 
         while ((inputLine = in.readLine()) != null) {
+            Pattern pattern1 = Pattern.compile("td class=\"text-left");
             Matcher matcher1 = pattern1.matcher(inputLine);
             if (matcher1.find()) {
                 row.append("    {\n");
@@ -57,12 +55,8 @@ public class Rates {
                         append(inputLine.substring(32, 34)).append("\",\n");
                 for (String str : status) {
                     inputLine = in.readLine();
-                    Matcher matcher2 = pattern2.matcher(inputLine);
-                    if (matcher2.find()) {
-                        match2 = matcher2.group();
-                    }
                     row.append("        \"").append(str).append("\": ").
-                            append(match2);
+                            append(inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf(">") + 7));
                     if (!str.equals("close")) {
                         row.append(",");
                     }
